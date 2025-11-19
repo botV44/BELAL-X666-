@@ -39,21 +39,6 @@ npm start
 
 🛠️ CI/CD Workflow
 
-name: BELAL X666 CI
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
