@@ -1,80 +1,83 @@
-// index.js — BELAL X666 entry with autoloader
+// Entry with autoloader
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-const config = require('./bot.config.json');
-const { logInfo, logWarn } = require('./utils/logger');
 
-logInfo(`BELAL X666 started | Prefix: ${config.prefix} | Language: ${config.language}`);
+const configPath = path.join(__dirname, 'bot.config.json');
+const config = fs.existsSync(configPath)
+  ? JSON.parse(fs.readFileSync(configPath, 'utf-8'))
+  : { prefix: '!', language: 'en' };
 
-// Load language file
+// simple logger
+function logInfo(msg) { console.log(`[INFO] ${msg}`); }
+function logWarn(msg) { console.warn(`[WARN] ${msg}`); }
+
+// Load language messages
 const langFile = path.join(__dirname, 'lang', `${config.language}.json`);
 let MESSAGES = {};
 try {
   MESSAGES = JSON.parse(fs.readFileSync(langFile, 'utf-8'));
 } catch {
-  logWarn(`Language file not found, falling back to en.json`);
-  MESSAGES = JSON.parse(fs.readFileSync(path.join(__dirname, 'lang', 'en.json'), 'utf-8'));
+  logWarn('Language file missing, fallback to en.json');
+  MESSAGES = fs.existsSync(path.join(__dirname, 'lang', 'en.json'))
+    ? JSON.parse(fs.readFileSync(path.join(__dirname, 'lang', 'en.json'), 'utf-8'))
+    : {};
 }
 
-// Placeholder client
-function initClient() {
-  logInfo('Client initialized (placeholder)');
-  return {
-    onMessage: (handler) => logInfo('Message listener bound'),
-    sendText: (to, text) => logInfo(`Send to ${to}: ${text}`)
-  };
-}
-const client = initClient();
+// Mock client
+const client = {
+  sendText: (to, text) => logInfo(`Send to ${to}: ${text}`),
+  onMessage: (handler) => logInfo('Message listener bound')
+};
 
-// 🔥 Commands autoloader
+// Autoload commands
+const commandsDir = path.join(__dirname, 'commands'); // change to 'Comments' if you use that
 const commands = {};
-const commandsPath = path.join(__dirname, 'commands');
-if (fs.existsSync(commandsPath)) {
-  const files = fs.readdirSync(commandsPath).filter(f => f.endsWith('.js'));
-  for (const file of files) {
+if (fs.existsSync(commandsDir)) {
+  for (const file of fs.readdirSync(commandsDir).filter(f => f.endsWith('.js'))) {
     try {
-      const cmd = require(path.join(commandsPath, file));
-      if (cmd && cmd.name && typeof cmd.execute === 'function') {
+      const cmd = require(path.join(commandsDir, file));
+      if (cmd?.name && typeof cmd.execute === 'function') {
         commands[cmd.name] = cmd;
         logInfo(`Loaded command: ${cmd.name} (${file})`);
       } else {
-        logWarn(`Skipped invalid command file: ${file}`);
+        logWarn(`Skipped invalid command: ${file}`);
       }
-    } catch (err) {
-      logWarn(`Error loading command file ${file}: ${err.message}`);
+    } catch (e) {
+      logWarn(`Error loading ${file}: ${e.message}`);
     }
   }
 } else {
-  logWarn('No commands folder found, skipping autoload.');
+  logWarn('Commands folder not found');
 }
 
-// Base handlers
+// Handlers
 function handleFallback(to) {
-  client.sendText(to, MESSAGES.fallback);
+  client.sendText(to, MESSAGES.fallback || 'Unknown command. Try !help');
 }
 function handleHelp(to) {
-  client.sendText(to, MESSAGES.help);
+  const help = MESSAGES.help || 'Commands: !animate <prompt>, !inbox list|clear, !roast';
+  client.sendText(to, help);
 }
 
 function handleIncoming({ from, text }) {
-  if (!text.startsWith(config.prefix)) return handleFallback(from);
+  if (!text || !text.startsWith(config.prefix)) return handleFallback(from);
   const raw = text.slice(config.prefix.length).trim();
   const [cmdName, ...args] = raw.split(/\s+/);
 
   if (cmdName === 'help') return handleHelp(from);
 
   const cmd = commands[cmdName];
-  if (cmd) {
-    try {
-      cmd.execute({ client, from, args, MESSAGES });
-    } catch (err) {
-      logWarn(`Error executing command ${cmdName}: ${err.message}`);
-      client.sendText(from, MESSAGES.error || 'Something went wrong.');
-    }
-  } else {
-    handleFallback(from);
+  if (!cmd) return handleFallback(from);
+
+  try {
+    cmd.execute({ client, from, args, MESSAGES });
+  } catch (err) {
+    logWarn(`Execute error ${cmdName}: ${err.message}`);
+    client.sendText(from, MESSAGES.error || 'Something went wrong.');
   }
 }
 
+// Bind listener (placeholder)
 client.onMessage(handleIncoming);
+logInfo(`BELAL X666 started | Prefix: ${config.prefix} | Language: ${config.language}`);
