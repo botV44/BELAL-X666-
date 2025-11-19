@@ -1,16 +1,5 @@
 # BELAL X666
-## ১. দরকারি ফাইলগুলো
-- `index.js` → বট চালানোর মূল ফাইল
-- `package.json` → প্রজেক্টের তথ্য ও স্ক্রিপ্ট
-- `.env` → তোমার API key/token রাখার ফাইল
-- `.gitignore` → কোন ফাইল GitHub‑এ যাবে না সেটা ঠিক করে
-- `commands/` → সব কমান্ড ফাইল (animate.js, inbox.js, roast.js)
-- `lang/` → ভাষার fallback মেসেজ (bn.json, en.json)
-- `.github/workflows/belal-ci.yml` → GitHub Actions workflow
 
----
-
-## ২. `.env` ফাইল (API key/token)
 ```dotenv
 NODE_ENV=production
 BOT_TOKEN=your_bot_token_here
