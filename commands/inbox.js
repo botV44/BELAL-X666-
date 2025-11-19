@@ -1,24 +1,20 @@
-module.exports = {
-  name: "inbox",
-  execute: ({ client, from, args, MESSAGES }) => {
-    if (!args.length) {
-      return client.sendText(from, MESSAGES?.inbox_usage || "Usage: !inbox list | clear");
-    }
-    const action = args[0].toLowerCase();
+const chatgpt = require('./commands/chatgpt');
+const gemini = require('./commands/gemini');
+const queenchat = require('./commands/queenchat');
 
-    if (action === "list") {
-      const inboxMessages = [
-        "Message 1: Welcome to BELAL X666!",
-        "Message 2: Try !help for guidance",
-        "Message 3: New features rolling out..."
-      ];
-      return client.sendText(from, inboxMessages.join("\n"));
-    }
+...
 
-    if (action === "clear") {
-      return client.sendText(from, "🗑 Inbox cleared (placeholder).");
-    }
+if (msg.startsWith('!chatgpt')) {
+  const prompt = msg.replace('!chatgpt ', '');
+  chatgpt(prompt).then(reply => api.sendMessage(reply, sender));
+}
 
-    return client.sendText(from, MESSAGES?.inbox_unknown || "Unknown inbox action.");
-  }
-};
+if (msg.startsWith('!gemini')) {
+  const prompt = msg.replace('!gemini ', '');
+  gemini(prompt).then(reply => api.sendMessage(reply, sender));
+}
+
+if (msg.startsWith('!queen')) {
+  const prompt = msg.replace('!queen ', '');
+  queenchat(prompt).then(reply => api.sendMessage(reply, sender));
+}
