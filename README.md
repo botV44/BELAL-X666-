@@ -8,7 +8,6 @@ BELAL X666 বট চালাতে মাত্র ৩ ধাপ:
 git clone https://github.com/BOTX666/BELAL-X666-.git
 cd BELAL-X666-
 npm install
-
 <!-- Animated Header -->
 <p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&pause=1000&color=00D8FF&center=true&vCenter=true&width=800&lines=BELAL+X666+Bot;Fast.+Reliable.+Fun.;Bangla+%2B+English+Multilingual+Support;Clean+Repo+%26+CI%2FCD+Ready" alt="Typing SVG" />
