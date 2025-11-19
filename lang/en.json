@@ -1,8 +1,0 @@
-{
-  "fallback": "Unknown command. Try !help",
-  "help": "Commands: !animate <prompt>, !inbox list|clear, !roast",
-  "error": "Something went wrong.",
-  "animate_prompt": "Please provide an animation prompt.",
-  "inbox_usage": "Usage: !inbox list | clear",
-  "inbox_unknown": "Unknown inbox action."
-}
