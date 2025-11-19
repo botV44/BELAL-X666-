@@ -1,11 +1,30 @@
 const login = require('facebook-chat-api');
-const fs = require('fs');
 
-const appState = JSON.parse(fs.readFileSync('./fbstate.json', 'utf8'));
+function loadAppState() {
+  const config = require('./config.json');
+  const appStateRaw = process.env.APPSTATE_JSON; // এখন .env থেকে পড়বে
+  if (!appStateRaw) throw new Error("APPSTATE_JSON missing in .env");
 
-module.exports = function(callback) {
-  login({ appState }, (err, api) => {
-    if (err) return console.error('Login failed:', err);
-    callback(api);
+  const appState = JSON.parse(appStateRaw);
+
+  return new Promise((resolve, reject) => {
+    login({ appState }, (err, api) => {
+      if (err) return reject(err);
+      api.setOptions({
+        selfListen: false,
+        listenEvents: true,
+        autoReconnect: true
+      });
+      resolve(api);
+    });
   });
-};
+}
+
+function listenMqtt(api, handler) {
+  api.listenMqtt((err, event) => {
+    if (err) return console.error('listenMqtt error:', err);
+    handler(event, api);
+  });
+}
+
+module.exports = { loadAppState, listenMqtt };
