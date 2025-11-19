@@ -1,6 +1,8 @@
 {
-  "welcome": "BELAL X666 has started. Type '!help' for assistance.",
-  "fallback": "Command not recognized. Type '!help' for assistance.",
-  "help": "Commands will be added soon. For now, contact the admin for support.",
-  "error": "Sorry, something went wrong. Please try again later."
+  "fallback": "Unknown command. Try !help",
+  "help": "Commands: !animate <prompt>, !inbox list|clear, !roast",
+  "error": "Something went wrong.",
+  "animate_prompt": "Please provide an animation prompt.",
+  "inbox_usage": "Usage: !inbox list | clear",
+  "inbox_unknown": "Unknown inbox action."
 }
