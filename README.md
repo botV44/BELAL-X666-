@@ -1,5 +1,30 @@
 # BELAL X666
 
+# 🤖 BELAL X666 Bot
+
+BELAL X666 হলো একটি Messenger Bot, যেখানে animate, inbox, roast সহ বিভিন্ন কমান্ড আছে।  
+এটি multilingual fallback (Bangla + English) এবং external API (QueenChat, ChatGPT, Gemini) সাপোর্ট করে।
+
+---
+
+## ✨ Features
+
+- 🎨 `!animate <prompt>` → AI‑based animation reply (ChatGPT/Gemini fallback)
+- 📥 `!inbox list | clear` → Group inbox management
+- 🔥 `!roast` → Random roast message (70+ array support)
+- 🌐 Multilingual fallback → Bangla + English support
+- 🧠 Autoloader → All commands auto-loaded from `commands/` folder
+- 🛡️ `.env`‑based secure API key/token setup
+- 🧾 Language fallback → `lang/en.json` and `lang/bn.json`
+- 🧪 GitHub Actions CI/CD workflow ready
+- 🧹 Clean repo hygiene → `.gitignore` blocks all sensitive/conflict files
+- 🚀 Vercel/Heroku deploy‑ready setup
+
+---
+
+## ⚙️ Setup
+...
+
 ```dotenv
 NODE_ENV=production
 BOT_TOKEN=your_bot_token_here
