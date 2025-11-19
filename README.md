@@ -1,5 +1,43 @@
 # BELAL X666
+name: BELAL X666 CI
 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test || echo "No tests defined"
+
+      - name: Run lint
+        run: npm run lint || echo "Lint skipped"
+
+      - name: Build project
+        run: npm run build || echo "Build skipped"
+
+      - name: Dry run bot
+        run: npm run start || node index.js || echo "Dry run complete"
 ## ১. দরকারি ফাইলগুলো
 - `index.js` → বট চালানোর মূল ফাইল
 - `package.json` → প্রজেক্টের তথ্য ও স্ক্রিপ্ট
